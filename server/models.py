@@ -48,9 +48,9 @@ def __repr__(self):
 
 class Recipe(db.Model, SerializerMixin):
     __tablename__ = 'recipes'
-    __table_args__ = (
-        db.CheckConstraint('length(instructions) >= 50'),
-    )
+    # __table_args__ = (
+    #     db.CheckConstraint('len(instructions) >= 50'),
+    # )
     
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
@@ -62,20 +62,20 @@ class Recipe(db.Model, SerializerMixin):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    # @validates('title')
-    # def validate_title(self, key, title):
-    #     if not title:
-    #         raise ValueError("Recipe must have a title")
-    #     return title
+    @validates('title')
+    def validate_title(self, key, title):
+        if not title:
+            raise ValueError("Recipe must have a title")
+        return title
 
-    # @validates('instructions')
-    # def validate_instructions(self, key, string):
-    #     if not string:
-    #         raise ValueError("Recipe instructions must be present")
-    #     if( key == 'instructions'):
-    #         if len(string) <= 50:
-    #             raise ValueError("Recipe instructions must be at least 50 characters long.")
-    #     return string
+    @validates('instructions')
+    def validate_instructions(self, key, string):
+        if not string:
+            raise ValueError("Recipe instructions must be present")
+        if( key == 'instructions'):
+            if len(string) <= 50:
+                raise ValueError("Recipe instructions must be at least 50 characters long.")
+        return string
 
     def __repr__(self):
         return f'<Recipe: Title:{self.title}, Instructions: {self.instructions}, User: {self.user.username}>'

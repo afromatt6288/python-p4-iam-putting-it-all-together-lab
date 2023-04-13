@@ -249,11 +249,10 @@ class TestRecipeIndex:
 
             recipes = []
             for i in range(15):
-                instructions = fake.paragraph(nb_sentences=8)
                 
                 recipe = Recipe(
                     title=fake.sentence(),
-                    instructions=instructions,
+                    instructions=fake.paragraph(nb_sentences=8),
                     minutes_to_complete=randint(15,90),
                 )
 
